@@ -5,7 +5,7 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth.hashers import check_password
 from .models import *
 from .serializers import *
-
+from .email import message
 User = get_user_model()
 
 
@@ -24,6 +24,7 @@ class RegistrationView(APIView):
             email=email,
             password = password
         )
+        message(email)
         # user.set_password(password)
         # user.save
         token = Token.objects.create(user=user)
@@ -49,8 +50,6 @@ class AutorisationView(APIView):
         return Response({'error': 'No such a user'}, status=400)
 
         
-
-
 
 
 

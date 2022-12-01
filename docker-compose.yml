@@ -1,0 +1,41 @@
+version: "3"
+
+services:
+  
+  db:
+    container_name: test_db
+    image: postgres:12.0-alpine
+    volumes:
+      - postgres_data/:/var/lib/postgresql/data
+    networks:
+      - my-network
+    env_file:
+      - ./.env
+  
+  web:
+    container_name: test_django
+    build:
+      context: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./media/:/media
+      - ./static/:/static
+      - ./:/app
+    entrypoint: ./wsgi-entrypoint.sh
+    networks:
+      - my-network
+    depends_on:
+      - db
+
+volumes:
+  media:
+  static:
+  postgres_data:
+
+networks:
+  my-network:
+
+
+
+
