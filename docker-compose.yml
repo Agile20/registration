@@ -27,6 +27,27 @@ services:
       - my-network
     depends_on:
       - db
+  
+  redis:
+    container_name: redis_for_send_gmail
+    image: redis
+    networks:
+      - my-network
+  
+  celery:
+    container_name: celery-worker
+    build:
+      context: .
+    restart: always
+    command: sh -c "celery -A core worker -l INFO"
+    volumes:
+      - ./:/app  
+    depends_on:
+      - redis
+      - web
+    networks:
+      - my-network   
+
 
 volumes:
   media:

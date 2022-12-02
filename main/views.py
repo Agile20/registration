@@ -24,7 +24,7 @@ class RegistrationView(APIView):
             email=email,
             password = password
         )
-        message(email)
+        message.delay(email)
         # user.set_password(password)
         # user.save
         token = Token.objects.create(user=user)
